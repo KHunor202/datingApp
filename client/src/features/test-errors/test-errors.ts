@@ -9,7 +9,7 @@ import { Component, inject, signal } from '@angular/core';
 })
 export class TestErrors {
   private http = inject(HttpClient);
-  baseUrl = 'https://localhost:5001/api/';
+  baseUrl = 'http://localhost:5001/api/';
   validationErrors = signal<string[]>([]);
 
   get404Error() {
