@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using API.Entities;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -31,5 +29,10 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
     public async Task<IReadOnlyList<Photo>> GetPhotosForMemberAsync(string memberId)
     {
         return await context.Members.Where(r => r.Id == memberId).SelectMany(r => r.Photos).ToListAsync();
+    }
+
+    public async Task<Member?> GetMemberForUpdateAsync(string id)
+    {
+        return await context.Members.Include(r => r.User).SingleOrDefaultAsync(r => r.Id == id);
     }
 }
