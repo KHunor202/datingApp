@@ -1,7 +1,7 @@
 <div class="hero bg-base-200 min-h-screen">
     @if (!registerMode()) {
     <div class="hero-content text-center">
-        <div class="flex flex-col text-center">
+        <div class="flex flex-col items-center">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                 fill="currentColor" class="size-60 text-primary">
                 <path
@@ -9,14 +9,14 @@
             </svg>
             <h1 class="text-5xl font-bold">Find your match</h1>
             <p class="p-6">Come on in... All you need to do is sign up</p>
-            <div class="felx items-center gap-3">
+            <div class="flex items-center gap-3">
                 <button (click)="showRegister(true)" class="btn btn-primary btn-lg">Register</button>
                 <button class="btn btn-primary btn-lg">Login</button>
             </div>
         </div>
     </div>
     } @else {
-        <div class="text-2xl text-center felx justify-center">
+        <div class="flex justify-center w-full">
             <app-register (cancelRegister)="showRegister($event)" />
         </div>
     }
