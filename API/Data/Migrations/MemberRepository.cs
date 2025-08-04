@@ -1,4 +1,5 @@
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,29 @@ public class MemberRepository(AppDbContext context) : IMemberRepository
         return await context.SaveChangesAsync() > 0;
     }
 
-    public async Task<IReadOnlyList<Member>> GetMembersAsync(string username)
+    public async Task<PaginatedResult<Member>> GetMembersAsync(MemberParams memberParams)
     {
-        return await context.Members.ToListAsync();
+        var query = context.Members.AsQueryable();
+
+        query = query.Where(r => r.Id != memberParams.CurrentMemberId);
+
+        query = memberParams.OrderBy switch
+        {
+            "created" => query.OrderByDescending(r => r.Created),
+            _ => query.OrderByDescending(r => r.LastActive)
+        };
+
+        if (memberParams.Gender != null)
+        {
+            query = query.Where(r => r.Gender == memberParams.Gender);
+        }
+
+        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MaxAge - 1));
+        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-memberParams.MinAge));
+
+        query = query.Where(r => r.DateOfBirth >= minDob && r.DateOfBirth <= maxDob);
+
+        return await PaginationHelper.CreateAsync(query, memberParams.PageNumber, memberParams.PageSize);
     }
 
     public async Task<Member?> GetMemberByIdAsync(string id)
