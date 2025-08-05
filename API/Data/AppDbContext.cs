@@ -12,17 +12,19 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
     public DbSet<Photo> Photos { get; set; }
     public DbSet<MemberLike> Likes { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<Group> Groups { get; set; }
+    public DbSet<Connection> Connections { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
-         modelBuilder.Entity<IdentityRole>()
-            .HasData(
-                new IdentityRole { Id = "member-id", Name = "Member", NormalizedName = "MEMBER" },
-                new IdentityRole { Id = "moderator-id", Name = "Moderator", NormalizedName = "MODERATOR" },
-                new IdentityRole { Id = "admin-id", Name = "Admin", NormalizedName = "ADMIN" }
-            );
+
+        modelBuilder.Entity<IdentityRole>()
+           .HasData(
+               new IdentityRole { Id = "member-id", Name = "Member", NormalizedName = "MEMBER" },
+               new IdentityRole { Id = "moderator-id", Name = "Moderator", NormalizedName = "MODERATOR" },
+               new IdentityRole { Id = "admin-id", Name = "Admin", NormalizedName = "ADMIN" }
+           );
 
         modelBuilder.Entity<Message>()
             .HasOne(x => x.Recipient)
@@ -66,7 +68,8 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
                 if (property.ClrType == typeof(DateTime))
                 {
                     property.SetValueConverter(dateTimeConverter);
-                } else if (property.ClrType == typeof(DateTime?))
+                }
+                else if (property.ClrType == typeof(DateTime?))
                 {
                     property.SetValueConverter(nullableDateTimeConverter);
                 }
