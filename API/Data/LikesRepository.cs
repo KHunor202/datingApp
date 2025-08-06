@@ -25,7 +25,7 @@ public class LikesRepository(AppDbContext context) : ILikesRepository
             .ToListAsync();
     }
 
-     public async Task<PaginatedResult<Member>> GetMemberLikes(LikesParams likesParams)
+    public async Task<PaginatedResult<Member>> GetMemberLikes(LikesParams likesParams)
     {
         var query = context.Likes.AsQueryable();
         IQueryable<Member> result;
@@ -59,10 +59,5 @@ public class LikesRepository(AppDbContext context) : ILikesRepository
     public async Task<MemberLike?> GetMemberLike(string sourceMemberId, string targetMemberId)
     {
         return await context.Likes.FindAsync(sourceMemberId, targetMemberId);
-    }
-
-    public async Task<bool> SaveAllAsync()
-    {
-        return await context.SaveChangesAsync() > 0;
     }
 }

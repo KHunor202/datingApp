@@ -63,6 +63,7 @@
                     <span>{{user.displayName}}</span>
                 </div>
                 <ul tabindex="0"
+                    (click)="handleSelectUserItem()"
                     class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                     <li><a routerLink="/members/{{user.id}}">Edit profile</a></li>
                     <li><a (click)="logout()">Logout</a></li>
@@ -75,7 +76,13 @@
                     class="input" placeholder="Email" />
                 <input [(ngModel)]="creds.password" name="password"
                     type="password" class="input" placeholder="Password" />
-                <button type="submit" class="btn">Login</button>
+                <button type="submit" 
+                    class="btn btn-primary">
+                    @if (loading()) {
+                        <span class="mr-2 loading loading-spinner"></span>
+                    }
+                    Login
+                </button>
             </form>
             }
         </div>
